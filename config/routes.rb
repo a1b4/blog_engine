@@ -1,5 +1,7 @@
 Blog::Engine.routes.draw do
   resources :articles do
-    get 'export', to: 'articles#export'
+    member do
+      get 'export'
+    end
   end
 end
