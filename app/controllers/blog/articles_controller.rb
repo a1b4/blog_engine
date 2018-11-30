@@ -15,13 +15,21 @@ module Blog
 
     def update
       @article = Article.find_by_id(params[:id])
-      return render json: { error: 'Article does not exist' }, status: :not_found unless @article
+      return not_found_response unless @article
 
       if @article.update(article_params)
         render json: @article.to_json
       else
         errors_response
       end
+    end
+
+    def destroy
+      @article = Article.find_by_id(params[:id])
+      return not_found_response unless @article
+
+      @article.destroy
+      head :no_content
     end
 
     private
@@ -32,6 +40,10 @@ module Blog
 
     def errors_response
       render json: { errors: @article.errors }, status: :bad_request
+    end
+
+    def not_found_response
+      render json: { error: 'Article does not exist' }, status: :not_found
     end
   end
 end
