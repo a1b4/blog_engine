@@ -8,7 +8,7 @@ module Blog
 
     def create
       @article = Article.new(article_params)
-      return errors_response unless @article.save
+      return errors_response(@article) unless @article.save
 
       render json: @article.to_json
     end
@@ -20,7 +20,7 @@ module Blog
       if @article.update(article_params)
         render json: @article.to_json
       else
-        errors_response
+        errors_response(@article)
       end
     end
 
@@ -50,10 +50,5 @@ module Blog
     def article_params
       params.require(:article).permit(:title, :content, :author_id)
     end
-
-    def errors_response
-      render json: { errors: @article.errors }, status: :bad_request
-    end
-
   end
 end
