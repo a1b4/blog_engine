@@ -7,6 +7,7 @@ module Blog
     setup do
       @routes = Engine.routes
       @article = blog_articles(:valid)
+      @comment = blog_comments(:valid)
     end
 
     test 'should get index' do
@@ -34,6 +35,21 @@ module Blog
     test 'post create should return not found' do
       comment = { text: 'my new comment' }
       post article_comments_url(10), params: { comment: comment }
+      assert_response :not_found
+    end
+
+    test 'should destroy' do
+      delete article_comment_url(@comment.article.id, @comment.id)
+      assert_response :success
+    end
+
+    test 'destroy should return not found article' do
+      delete article_comment_url(10, @comment.id)
+      assert_response :not_found
+    end
+
+    test 'destroy should return not found comment' do
+      delete article_comment_url(@comment.article.id, 10)
       assert_response :not_found
     end
   end
