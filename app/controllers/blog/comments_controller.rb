@@ -32,6 +32,20 @@ module Blog
       head :no_content
     end
 
+    def reply
+      @article = find_article
+      return not_found_response('Article') unless @article
+
+      @parent = @article.comments.find_by_id(params[:id])
+      return not_found_response('Comment') unless @parent
+
+      @comment = @parent.replies.create comment_params
+      @comment.article = @article
+      return errors_response(@comment) unless @comment.save
+
+      render json: @comment.to_json
+    end
+
     private
 
     def comment_params
