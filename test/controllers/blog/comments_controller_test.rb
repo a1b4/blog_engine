@@ -52,5 +52,33 @@ module Blog
       delete article_comment_url(@comment.article.id, 10)
       assert_response :not_found
     end
+
+    test 'should post reply' do
+      new_comment = { text: 'a comment reply' }
+      post reply_article_comment_url(@comment.article.id, @comment.id),
+        params: { comment: new_comment }
+      assert_response :success
+    end
+
+    test 'reply should return not found article' do
+      new_comment = { text: 'a comment reply' }
+      post reply_article_comment_url(10, @comment.id),
+      params: { comment: new_comment }
+      assert_response :not_found
+    end
+
+    test 'reply should return not found comment' do
+      new_comment = { text: 'a comment reply' }
+      post reply_article_comment_url(@comment.article.id, 10),
+      params: { comment: new_comment }
+      assert_response :not_found
+    end
+
+    test 'reply should return errors' do
+      new_comment = { text: nil }
+      post reply_article_comment_url(@comment.article.id, @comment.id),
+      params: { comment: new_comment }
+      assert_response :bad_request
+    end
   end
 end
