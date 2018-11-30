@@ -20,7 +20,7 @@ module Blog
       assert_response :success
     end
 
-    test 'should post create return errors' do
+    test 'post create should return errors' do
       article = { title: 'title' }
       post articles_url, params: { article: article }
       assert_response :bad_request
