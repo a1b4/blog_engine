@@ -3,6 +3,6 @@ Blog::Engine.routes.draw do
     member do
       get 'export'
     end
-    resources :comments
+    resources :comments, except: %i[show update]
   end
 end
