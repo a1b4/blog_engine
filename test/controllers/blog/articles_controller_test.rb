@@ -53,5 +53,10 @@ module Blog
       delete article_url(10)
       assert_response :not_found
     end
+
+    test 'should get export' do
+      get export_article_url(@article.id)
+      assert_response :success
+    end
   end
 end
