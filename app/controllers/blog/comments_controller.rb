@@ -3,28 +3,43 @@ require_dependency 'blog/application_controller'
 module Blog
   class CommentsController < ApplicationController
     def index
-      @article = Article.find_by_id(params[:article_id])
+      @article = find_article
       return not_found_response('Article') unless @article
 
       render json: @article.comments.to_json
     end
 
     def create
-      @article = Article.find_by_id(params[:article_id])
+      @article = find_article
       return not_found_response('Article') unless @article
 
       @comment = @article.comments.create(comment_params)
       if @comment.valid?
-        render json: @article.to_json
+        render json: @comment.to_json
       else
         errors_response(@comment)
       end
+    end
+
+    def destroy
+      @article = find_article
+      return not_found_response('Article') unless @article
+
+      @comment = @article.comments.find_by_id(params[:id])
+      return not_found_response('Comment') unless @comment
+
+      @comment.destroy
+      head :no_content
     end
 
     private
 
     def comment_params
       params.require(:comment).permit(:text)
+    end
+
+    def find_article
+      Article.find_by_id(params[:article_id])
     end
   end
 end
