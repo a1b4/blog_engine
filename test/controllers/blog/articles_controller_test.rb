@@ -43,5 +43,15 @@ module Blog
       patch article_url(10), params: { article: article_updates }
       assert_response :not_found
     end
+
+    test 'should destroy' do
+      delete article_url(@article.id)
+      assert_response :success
+    end
+
+    test 'destroy should return not found' do
+      delete article_url(10)
+      assert_response :not_found
+    end
   end
 end
