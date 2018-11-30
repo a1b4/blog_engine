@@ -32,6 +32,19 @@ module Blog
       head :no_content
     end
 
+    def export
+      @article = Article.find_by_id(params[:id])
+      return not_found_response unless @article
+
+      axlsx = Axlsx::Package.new
+      book = axlsx.workbook
+      @article.write_workbook(book)
+
+      file = Tempfile.new(["article_#{@article.id}", 'xlsx'])
+      axlsx.serialize(file.path)
+      send_file file.path
+    end
+
     private
 
     def article_params
