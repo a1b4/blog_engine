@@ -15,7 +15,7 @@ module Blog
 
     def update
       @article = Article.find_by_id(params[:id])
-      return not_found_response unless @article
+      return not_found_response('Article') unless @article
 
       if @article.update(article_params)
         render json: @article.to_json
@@ -26,7 +26,7 @@ module Blog
 
     def destroy
       @article = Article.find_by_id(params[:id])
-      return not_found_response unless @article
+      return not_found_response('Article') unless @article
 
       @article.destroy
       head :no_content
@@ -34,7 +34,7 @@ module Blog
 
     def export
       @article = Article.find_by_id(params[:id])
-      return not_found_response unless @article
+      return not_found_response('Article') unless @article
 
       axlsx = Axlsx::Package.new
       book = axlsx.workbook
@@ -55,8 +55,5 @@ module Blog
       render json: { errors: @article.errors }, status: :bad_request
     end
 
-    def not_found_response
-      render json: { error: 'Article does not exist' }, status: :not_found
-    end
   end
 end
