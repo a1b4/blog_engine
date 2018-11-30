@@ -1,5 +1,4 @@
-require 'axlsx'
-require 'axlsx_rails'
+require 'rubyXL'
 module Blog
   class Engine < ::Rails::Engine
     isolate_namespace Blog
