@@ -36,12 +36,13 @@ module Blog
       @article = Article.find_by_id(params[:id])
       return not_found_response('Article') unless @article
 
-      axlsx = Axlsx::Package.new
-      book = axlsx.workbook
-      @article.write_workbook(book)
+      book = RubyXL::Workbook.new
+      worksheet = book.worksheets[0]
+      worksheet.sheet_name = 'Article'
+      @article.write_workbook(worksheet)
 
-      file = Tempfile.new(["article_#{@article.id}", 'xlsx'])
-      axlsx.serialize(file.path)
+      file = Tempfile.new(["article_#{@article.id}.xlsx", '.xlsx'])
+      book.write(file.path)
       send_file file.path
     end
 
