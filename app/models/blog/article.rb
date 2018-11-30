@@ -1,5 +1,6 @@
 module Blog
   class Article < ApplicationRecord
+    has_many :comments, dependent: :destroy, foreign_key: 'blog_article_id'
     validates_presence_of :title, :content, :author_id
 
     def write_workbook(book)
