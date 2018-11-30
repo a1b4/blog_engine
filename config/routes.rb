@@ -3,5 +3,6 @@ Blog::Engine.routes.draw do
     member do
       get 'export'
     end
+    resources :comments
   end
 end
